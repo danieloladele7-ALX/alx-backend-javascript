@@ -35,3 +35,5 @@ At the end of this project, you are expected to be able to explain to anyone, wi
 - All of your functions/classes must be exported by using this format: `module.exports = myFunction;`
 
 ## Tasks To Complete
+
++ [x] 0. **Executing basic javascript with Node JS**<br/>[0-console.js](0-console.js) contains a module that exports a function named `displayMessage` that prints in `STDOUT` the string argument.
