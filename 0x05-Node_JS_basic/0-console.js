@@ -1,3 +1,4 @@
-const displayMessage = (d) => console.log(d);
-
-module.exports = displayMessage;
+module.exports = function displayMessage(text) {
+    console.log(text);
+  };
+  
