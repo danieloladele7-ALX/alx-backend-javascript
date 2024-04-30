@@ -1,6 +1,7 @@
+const express = require('express');
 const fs = require('fs');
 
-module.exports = function readDatabase(path) {
+function countStudents(path) {
   return new Promise((resolve, reject) => {
     fs.readFile(path, { encoding: 'utf-8' }, (err, data) => {
       if (err) return reject(Error('Cannot load the database'));
@@ -26,17 +27,37 @@ module.exports = function readDatabase(path) {
           ? `, ${list[idxFn]}`
           : list[idxFn];
       });
+
+      all.numberStudents = `Number of students: ${lines.length}\n`;
+      all.listStudents = [];
       for (const key in fields) {
         if (Object.hasOwnProperty.call(fields, key)) {
-          const number = fields[key];
-          all[key] = {
-            students: `List: ${students[key]}`,
-            number,
-          };
+          const element = fields[key];
+          all.listStudents.push(`Number of students in ${key}: ${element}. List: ${students[key]}`);
         }
       }
-
       return resolve(all);
     });
   });
-};
+}
+
+const app = express();
+const port = 1245;
+
+app.get('/', (req, res) => {
+  res.send('Hello Holberton School!');
+});
+app.get('/students', (req, res) => {
+  res.write('This is the list of our students\n');
+  countStudents(process.argv[2])
+    .then((data) => {
+      res.write(data.numberStudents);
+      res.end(data.listStudents.join('\n'));
+    })
+    .catch((err) => {
+      res.end(err.message);
+    });
+});
+app.listen(port);
+
+module.exports = app;

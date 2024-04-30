@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-module.exports = function readDatabase(path) {
+module.exports = function countStudents(path) {
   return new Promise((resolve, reject) => {
     fs.readFile(path, { encoding: 'utf-8' }, (err, data) => {
       if (err) return reject(Error('Cannot load the database'));
@@ -14,29 +14,23 @@ module.exports = function readDatabase(path) {
       // declarate two dictionaries for count each fields and store list of students
       const fields = {};
       const students = {};
-      // it will contain all data
-      const all = {};
 
       lines.forEach((line) => {
         const list = line.split(',');
         if (!fields[list[idxFd]]) fields[list[idxFd]] = 0;
         fields[list[idxFd]] += 1;
         if (!students[list[idxFd]]) students[list[idxFd]] = '';
-        students[list[idxFd]] += students[list[idxFd]]
-          ? `, ${list[idxFn]}`
-          : list[idxFn];
+        students[list[idxFd]] += students[list[idxFd]] ? `, ${list[idxFn]}` : list[idxFn];
       });
+
+      console.log(`Number of students: ${lines.length}`);
       for (const key in fields) {
         if (Object.hasOwnProperty.call(fields, key)) {
-          const number = fields[key];
-          all[key] = {
-            students: `List: ${students[key]}`,
-            number,
-          };
+          const element = fields[key];
+          console.log(`Number of students in ${key}: ${element}. List: ${students[key]}`);
         }
       }
-
-      return resolve(all);
+      return resolve();
     });
   });
 };
